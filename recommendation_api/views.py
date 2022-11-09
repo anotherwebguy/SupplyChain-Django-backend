@@ -5,6 +5,10 @@ import pickle
 import numpy as np
 from scipy import stats
 from . import data
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from . models import *
+from . serializer import *
 
 
 # Loading all Crop Recommendation Models
@@ -45,6 +49,9 @@ soil_label_dict = {}
 for soil_value in soiltype_label_dict:
     soil_label_dict[soiltype_label_dict[soil_value]] = soil_value
 
+print(crop_label_dict)
+print(soil_label_dict)
+
 
 def convert(o):
     if isinstance(o, np.generic):
@@ -73,25 +80,17 @@ def fertilizer_prediction(input_data):
 
     return prediction_data
     
+#---------------------Fertilzer Recommendation API---------------------
 
-# Create your views here.
+class FertilizerApiEndPoint(APIView):
 
-def recommendationResult(request):
-    predictiondata = []
-    resultdata = []
-    print(request.POST)
-    if request.method == 'POST':
-        if "broadcastCrop" in request.POST:
-            form_values = request.POST.dict()
-            column_names = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
-            input_data = np.asarray([float(form_values[i].strip()) for i in column_names]).reshape(
-                1, -1
-            )
-            print(input_data)
-            predictiondata = crop_prediction(input_data)
-            resultdata = data.crop(predictiondata[0][0])
-        if "broadcastFertilizer" in request.POST:
-            form_values = request.POST.dict()
+    serializer_class = FertilizerRecommenderSerializer
+    
+    def post(self, request, format=None):
+        serializer = FertilizerRecommenderSerializer(data=request.data)
+        if serializer.is_valid():
+            print(serializer.data)
+            form_values = serializer.data
             column_names = [
                 "Temparature",
                 "Humidity",
@@ -102,9 +101,8 @@ def recommendationResult(request):
                 "Potassium",
                 "Phosphorous",
             ]
-
             for key in form_values:
-                form_values[key] = form_values[key].strip()
+                form_values[key] = form_values[key]
 
             form_values["soil_type"] = soil_label_dict[form_values["soil_type"]]
             form_values["crop_type"] = crop_label_name_dict[form_values["crop_type"]]
@@ -113,12 +111,24 @@ def recommendationResult(request):
             )
             predictiondata = fertilizer_prediction(input_data)    
             resultdata = data.fertilizer(predictiondata[0][0])
+            return Response(resultdata)
 
-    return render(request,'recommend/result.html',{'prediction_data': predictiondata,'result_data': resultdata})        
+#---------------------Crop Recommendation API---------------------
 
-
-def recommend(request):
-    return render(request,'recommend/recommend.html')
-
-def result(request):
-    return render(request,'recommend/result.html')
+class CropApiEndPoint(APIView):
+    
+        serializer_class = CropRecommenderSerializer
+        
+        def post(self, request, format=None):
+            serializer = CropRecommenderSerializer(data=request.data)
+            if serializer.is_valid():
+                print(serializer.data)
+                form_values = serializer.data
+                column_names = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
+                input_data = np.asarray([float(form_values[i]) for i in column_names]).reshape(
+                    1, -1
+                )
+                print(input_data)
+                predictiondata = crop_prediction(input_data)
+                resultdata = data.crop(predictiondata[0][0])
+                return Response(resultdata)

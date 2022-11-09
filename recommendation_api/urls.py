@@ -3,6 +3,6 @@ from . import views
 from recommendation_api.views import *
 
 urlpatterns = [
-    # path('predict/', PredictionApiEndPoint.as_view(), name='predict'),
-    # path('sixmonths/', WinnersLoosersApiEndPoint.as_view(), name='sixmonths'),
+    path('fertilizer/', FertilizerApiEndPoint.as_view(), name='fertilzer'),
+    path('crop/', CropApiEndPoint.as_view(), name='crop'),
 ]
