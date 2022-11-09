@@ -9,7 +9,7 @@ class FertilizerRecommender(models.Model):
     potassium = models.FloatField()
     phosphorus = models.FloatField()
     soil_type = models.CharField(max_length=100)
-    crop_type = models.IntegerField()
+    crop_type = models.CharField(max_length=100)
 
 
 class CropRecommender(models.Model):

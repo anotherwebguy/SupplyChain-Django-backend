@@ -43,13 +43,15 @@ croptype_label_dict = pickle.load(
 
 crop_label_name_dict = {}
 for crop_value in croptype_label_dict:
+    print(crop_value)
     crop_label_name_dict[croptype_label_dict[crop_value]] = crop_value
 
 soil_label_dict = {}
 for soil_value in soiltype_label_dict:
+    print(soil_value)
     soil_label_dict[soiltype_label_dict[soil_value]] = soil_value
 
-print(crop_label_dict)
+print(crop_label_name_dict)
 print(soil_label_dict)
 
 
@@ -91,15 +93,16 @@ class FertilizerApiEndPoint(APIView):
         if serializer.is_valid():
             print(serializer.data)
             form_values = serializer.data
+            print(form_values)
             column_names = [
-                "Temparature",
-                "Humidity",
-                "Moisture",
+                "temperature",
+                "humidity",
+                "moisture",
                 "soil_type",
                 "crop_type",
-                "Nitrogen",
-                "Potassium",
-                "Phosphorous",
+                "nitrogen",
+                "potassium",
+                "phosphorus",
             ]
             for key in form_values:
                 form_values[key] = form_values[key]
@@ -109,6 +112,7 @@ class FertilizerApiEndPoint(APIView):
             input_data = np.asarray([float(form_values[i]) for i in column_names]).reshape(
                 1, -1
             )
+            print(input_data)
             predictiondata = fertilizer_prediction(input_data)    
             resultdata = data.fertilizer(predictiondata[0][0])
             return Response(resultdata)
