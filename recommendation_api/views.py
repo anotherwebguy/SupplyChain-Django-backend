@@ -105,7 +105,7 @@ class FertilizerApiEndPoint(APIView):
                 "phosphorus",
             ]
             for key in form_values:
-                form_values[key] = form_values[key]
+                form_values[key] = form_values[key].strip()
 
             form_values["soil_type"] = soil_label_dict[form_values["soil_type"]]
             form_values["crop_type"] = crop_label_name_dict[form_values["crop_type"]]
@@ -129,7 +129,7 @@ class CropApiEndPoint(APIView):
                 print(serializer.data)
                 form_values = serializer.data
                 column_names = ["N", "P", "K", "temperature", "humidity", "ph", "rainfall"]
-                input_data = np.asarray([float(form_values[i]) for i in column_names]).reshape(
+                input_data = np.asarray([float(form_values[i].strip()) for i in column_names]).reshape(
                     1, -1
                 )
                 print(input_data)
