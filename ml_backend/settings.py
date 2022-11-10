@@ -129,4 +129,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS=True
 CORS_ALLOW_CREDENTIALS = False
-ALLOWED_HOSTS = ['django-backend-ml.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['*']
