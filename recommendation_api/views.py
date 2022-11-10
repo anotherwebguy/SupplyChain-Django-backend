@@ -133,6 +133,9 @@ class CropApiEndPoint(APIView):
                     1, -1
                 )
                 print(input_data)
+                print("hii")
                 predictiondata = crop_prediction(input_data)
                 resultdata = data.crop(predictiondata[0][0])
-                return Response(resultdata)
+                json_obj = json.dumps(resultdata, default=convert)
+                print(json_obj)
+                return Response(json_obj)
