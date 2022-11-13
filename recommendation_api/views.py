@@ -98,11 +98,11 @@ class FertilizerApiEndPoint(APIView):
                 "temperature",
                 "humidity",
                 "moisture",
-                "soil_type",
-                "crop_type",
                 "nitrogen",
                 "potassium",
                 "phosphorus",
+                "soil_type",
+                "crop_type",
             ]
             for key in form_values:
                 form_values[key] = form_values[key].strip()
@@ -115,6 +115,7 @@ class FertilizerApiEndPoint(APIView):
             print(input_data)
             predictiondata = fertilizer_prediction(input_data)    
             resultdata = data.fertilizer(predictiondata[0][0])
+            print(resultdata)
             return Response(resultdata)
 
 #---------------------Crop Recommendation API---------------------
@@ -136,6 +137,4 @@ class CropApiEndPoint(APIView):
                 print("hii")
                 predictiondata = crop_prediction(input_data)
                 resultdata = data.crop(predictiondata[0][0])
-                json_obj = json.dumps(resultdata, default=convert)
-                print(json_obj)
-                return Response(json_obj)
+                return Response(resultdata)

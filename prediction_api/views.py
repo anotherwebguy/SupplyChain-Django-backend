@@ -466,7 +466,7 @@ class PredictionApiEndPoint(APIView):
                 "max_crop": max_crop,
                 "min_crop": min_crop,
                 "forecast_values": forecast_crop_values,
-                "forecast_x": str(forecast_x),
+                "forecast_x": forecast_x,
                 "forecast_y": forecast_y,
                 "previous_values": prev_crop_values,
                 "previous_x": previous_x,
@@ -491,6 +491,7 @@ class WinnersLoosersApiEndPoint(APIView):
             'bottom5': TopFiveLosers(),
             'sixmonths': SixMonthsForecast()
         }
+        print(context)
         return Response(context)
         
 
